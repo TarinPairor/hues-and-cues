@@ -37,9 +37,9 @@ On a phone the full board scrolls horizontally so similar colors remain individu
 
 ## Seats and reconnects
 
-There is one hardcoded room with exactly two players, displayed as Player 1 and Player 2 (internally A and B). The server checks the hardcoded password `amy` and assigns the first unreserved seat; clients cannot choose a player number. Each seat gets a random reconnect token saved in session storage. Refreshing or reconnecting preserves the seat, score, and round. Opening the same seat session in another tab transfers that seat to the new connection.
+There is one hardcoded room with exactly two players, displayed as Player 1 and Player 2 (internally A and B). The server checks the hardcoded password `amy` and assigns the first disconnected or unused seat; clients cannot choose a player number. Each seat gets a random reconnect token saved in session storage. Refreshing or reconnecting preserves the seat, score, and round. Opening the same seat session in another tab transfers that seat to the new connection.
 
-A lost connection reserves its seat so its player can return. **Leave game** explicitly releases it for someone else. Restarting the server clears all seats, scores, and rounds. There are no accounts, database, or permanent score storage. Anyone with access to this server and the shared password can claim an available seat; either seated player can restart scores.
+A lost connection keeps its reconnect token valid until someone joins that offline seat with the password. A new password join replaces that token, so the previous session cannot take the seat back. **Leave game** explicitly releases it for someone else. Restarting the server clears all seats, scores, and rounds. There are no accounts, database, or permanent score storage. Anyone with access to this server and the shared password can claim an available seat; either seated player can restart scores.
 
 ## Checks
 

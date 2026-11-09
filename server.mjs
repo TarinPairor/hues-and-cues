@@ -54,10 +54,11 @@ export function createGameServer() {
             if (!seat) throw new Error('Your session expired. Enter the password to join again.');
           } else {
             if (message.password !== 'amy') throw new Error('Incorrect password. Try again.');
-            seat = SEATS.find(candidate => !players.has(candidate));
+            seat = SEATS.find(candidate => players.get(candidate)?.ws?.readyState !== WebSocket.OPEN);
             if (!seat) throw new Error('The game is full. Both players have already joined.');
           }
-          const existing = players.get(seat);
+          // A password join takes an offline seat with a fresh reconnect token.
+          const existing = message.token ? players.get(seat) : null;
           const player = existing || { token: randomBytes(24).toString('hex'), ws: null };
           if (player.ws && player.ws !== ws) { player.ws.seat = null; player.ws.close(4001, 'Seat opened in another tab'); }
           player.ws = ws; players.set(seat, player); ws.seat = seat;
