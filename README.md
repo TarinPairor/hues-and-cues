@@ -1,6 +1,6 @@
 # Minigames — for two
 
-A shared two-player minigame room with live WebSockets. Choose Hues & Cues or In a Nutshell. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has 50 original general-knowledge questions.
+A shared two-player minigame room with live WebSockets. Choose Hues & Cues or In a Nutshell. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has 50 original, harder general-knowledge questions.
 
 ## Run
 
@@ -47,7 +47,7 @@ On a phone the full board scrolls horizontally so similar colors remain individu
 4. If correct, the **Nut Picker earns 1 point per hidden word**. A wrong answer earns 0. Revealing every word means 0 points even for a correct answer.
 5. Reveal the full question, submitted answer, correct answer, and points. Next round swaps Nut Picker and guesser.
 
-The 50 original questions in `games/nutshell-questions.mjs` cover familiar animals, food, science, places, stories, and everyday facts. These are questions written for this app, not the commercial game's card deck. All 50 are shuffled and used before any repeats; play continues with another shuffle. Restart scores resets only In a Nutshell, including its history and shuffled deck. Returning to All games preserves its round and scores independently of Hues & Cues.
+The 50 original questions in `games/nutshell-questions.mjs` cover geography, science, history, literature, art, food, and culture at a harder trivia level. These are questions written for this app, not the commercial game's card deck. All 50 are shuffled and used before any repeats; play continues with another shuffle. Restart scores resets only In a Nutshell, including its history and shuffled deck. Returning to All games preserves its round and scores independently of Hues & Cues.
 
 ## Seats and reconnects
 
