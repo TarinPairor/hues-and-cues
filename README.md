@@ -1,6 +1,6 @@
 # Minigames — for two
 
-A shared two-player minigame room with live WebSockets. Choose Hues & Cues or In a Nutshell. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has 50 original, harder general-knowledge questions.
+A shared two-player minigame room with live WebSockets. Choose Hues & Cues or In a Nutshell. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has separate question decks: 50 hard questions for Player 1 to answer and 50 very easy questions for Player 2 to answer.
 
 ## Run
 
@@ -47,7 +47,7 @@ On a phone the full board scrolls horizontally so similar colors remain individu
 4. If correct, the **Nut Picker earns 1 point per hidden word**. A wrong answer earns 0. Revealing every word means 0 points even for a correct answer.
 5. Reveal the full question, submitted answer, correct answer, and points. Next round swaps Nut Picker and guesser.
 
-The 50 original questions in `games/nutshell-questions.mjs` cover geography, science, history, literature, art, food, and culture at a harder trivia level. These are questions written for this app, not the commercial game's card deck. All 50 are shuffled and used before any repeats; play continues with another shuffle. Restart scores resets only In a Nutshell, including its history and shuffled deck. Returning to All games preserves its round and scores independently of Hues & Cues.
+Difficulty follows the **guesser**: Player 1 answers hard questions from `games/nutshell-questions.mjs`, while Player 2 answers very easy questions from `games/nutshell-easy-questions.mjs`. Each bank has 50 original questions. This means Player 1, as Nut Picker, sees an easy question for Player 2; Player 2, as Nut Picker, sees a hard question for Player 1. Each deck shuffles independently and uses all 50 before repeating. Restart scores resets both decks, scores, and history for In a Nutshell only. Returning to All games preserves progress independently of Hues & Cues.
 
 ## Seats and reconnects
 
@@ -72,7 +72,8 @@ Implementation verification in the restricted workspace: **18 tests passed, 1 re
 - `room.mjs`: shared game selection, saved game sessions, action routing.
 - `games/hues.mjs`: Hues & Cues rules, scoring, hints, and private snapshots.
 - `games/nutshell.mjs`: In a Nutshell rules, private word windows, answer matching, and shuffled deck.
-- `games/nutshell-questions.mjs`: 50 original questions and accepted answers, outside the public files.
+- `games/nutshell-questions.mjs`: 50 hard questions and the bank assignment by guesser.
+- `games/nutshell-easy-questions.mjs`: 50 very easy questions for Player 2. Both banks stay outside the public files.
 - `game.mjs`: compatibility export of the Hues & Cues rules.
 - `server.mjs`: shared room, seat tokens, WebSockets, and static HTTP server.
 - `public/app.js`: shared room, join controls, game shelf, and connection lifecycle.

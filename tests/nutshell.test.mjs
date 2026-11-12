@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { NutshellGame } from '../games/nutshell.mjs';
-import { QUESTIONS } from '../games/nutshell-questions.mjs';
+import { QUESTIONS, QUESTION_BANKS } from '../games/nutshell-questions.mjs';
 import { Room } from '../room.mjs';
 
 function reveal(game, indices = [0]) { game.act(game.giver, {type:'reveal-words',indices}); }
@@ -9,6 +9,9 @@ function finish(game, answer = game.snapshot(game.giver).answer) { reveal(game);
 
 test('50 original questions have usable answers, with no duplicate questions', () => {
   assert.equal(QUESTIONS.length, 50);
+  assert.equal(QUESTION_BANKS.B.length, 50);
+  assert.equal(new Set(QUESTION_BANKS.B.map(card => card.question)).size, 50);
+  assert.ok(QUESTION_BANKS.B.every(card => card.answers.length && card.answers.every(answer => answer.trim())));
   assert.equal(new Set(QUESTIONS.map(card => card.question)).size, 50);
   assert.ok(QUESTIONS.every(card => card.question.split(/\s+/).length > 1 && card.answers.length && card.answers.every(answer => answer.trim())));
 });
@@ -51,15 +54,19 @@ test('roles, word selections, answer validation and locked selections are enforc
   for (const text of ['', '   ', '!!!', null, 'a'.repeat(121)]) assert.throws(() => game.act('B', {type:'answer',text}));
   assert.equal(game.stage, 'guess');
 });
-test('question deck does not repeat for 50 rounds, then continues; reset clears scores and history', () => {
-  const game = new NutshellGame(), questions = new Set();
-  for (let i = 0; i < 50; i++) {
-    questions.add(game.snapshot(game.giver).words.join(' ')); finish(game); game.act(game.giver, {type:'next'});
+test('each guesser gets their own difficulty with no repeats until all 50 questions are used', () => {
+  const game = new NutshellGame(), seen = { A: new Set(), B: new Set() };
+  for (let i = 0; i < 100; i++) {
+    const question = game.snapshot(game.giver).words.join(' ');
+    assert.ok(QUESTION_BANKS[game.guesser].some(card => card.question === question));
+    assert.ok(!seen[game.guesser].has(question));
+    seen[game.guesser].add(question);
+    finish(game); game.act(game.giver, {type:'next'});
   }
-  assert.equal(questions.size, 50); assert.equal(game.round, 51); assert.equal(game.stage, 'pick');
+  assert.equal(seen.A.size, 50); assert.equal(seen.B.size, 50); assert.equal(game.round, 101); assert.equal(game.stage, 'pick');
   game.act('B', {type:'restart'});
   assert.equal(game.round, 1); assert.equal(game.giver, 'A'); assert.equal(game.stage, 'pick');
-  assert.deepEqual(game.scores, {A:0,B:0}); assert.deepEqual(game.history, []); assert.equal(game.deck.length, 49);
+  assert.deepEqual(game.scores, {A:0,B:0}); assert.deepEqual(game.history, []); assert.equal(game.decks.B.length, 49); assert.equal(game.decks.A.length, 50);
 });
 test('Nutshell and Hues sessions resume independently and resetting one preserves the other', () => {
   const room = new Room();

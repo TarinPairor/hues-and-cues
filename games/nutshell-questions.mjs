@@ -1,3 +1,5 @@
+import { EASY_QUESTIONS } from './nutshell-easy-questions.mjs';
+
 // Original, harder general-knowledge questions. Kept outside public/ so answers stay private.
 export const QUESTIONS = [
   ['Which river flows through Vienna Budapest and Belgrade?', ['Danube', 'the Danube', 'Danube River', 'the Danube River']],
@@ -55,3 +57,6 @@ export const QUESTIONS = [
   ['Which tennis tournament is played on clay courts at Roland Garros?', ['French Open', 'the French Open', 'Roland Garros']],
   ['Which company originally developed the video game character Sonic the Hedgehog?', ['Sega']],
 ].map(([question, answers]) => ({ question, answers }));
+
+// Difficulty follows the guesser, not the Nut Picker.
+export const QUESTION_BANKS = { A: QUESTIONS, B: EASY_QUESTIONS };
