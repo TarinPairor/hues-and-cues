@@ -1,6 +1,6 @@
 # Minigames — for two
 
-A shared two-player minigame room with live WebSockets. Hues & Cues is the first and currently only minigame, with a 16 × 30 board sampled from the supplied reference image.
+A shared two-player minigame room with live WebSockets. Choose Hues & Cues or In a Nutshell. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has 50 original general-knowledge questions.
 
 ## Run
 
@@ -25,7 +25,7 @@ This needs a running Node server with WebSocket support. A static file server or
 
 ## Choose a game
 
-Once both players have joined, either player can select **Hues & Cues** from the game shelf. Selection opens the game for both players. **All games** brings both players back to the shelf while preserving the round and scores. Select **Resume game** to continue. Sessions remain in memory while the server runs.
+Once both players have joined, either player can select **Hues & Cues** or **In a Nutshell** from the game shelf. Selection opens the game for both players. **All games** brings both players back to the shelf while preserving the round and scores. Select **Resume game** to continue. Sessions remain in memory while the server runs.
 
 ## Play Hues & Cues
 
@@ -38,6 +38,16 @@ Once both players have joined, either player can select **Hues & Cues** from the
 The input counts words as you type; the server independently enforces limits and turns. Hyphens, slashes, and dashes separate words. Apostrophes stay inside words; Unicode letters are supported. This checks word count, not whether a clue is fair or meaningful.
 
 On a phone the full board scrolls horizontally so similar colors remain individually selectable. Keyboard users can focus the board's first square, navigate with arrow keys, and select with Enter or Space before locking in the guess.
+
+## Play In a Nutshell
+
+1. Player 1 starts as the **Nut Picker** and privately sees a full question and its answer. All words are initially marked for reveal. Tap individual numbered windows to hide or reveal them, keeping at least one revealed.
+2. Lock the words to show them to the other player. Hidden words and the answer stay private. Once locked, the selection cannot change.
+3. The other player types **one answer**. Matching ignores case, extra spaces, and punctuation. Common alternative answers are accepted where listed in the question bank. No fuzzy spelling matching is used.
+4. If correct, the **Nut Picker earns 1 point per hidden word**. A wrong answer earns 0. Revealing every word means 0 points even for a correct answer.
+5. Reveal the full question, submitted answer, correct answer, and points. Next round swaps Nut Picker and guesser.
+
+The 50 original questions in `games/nutshell-questions.mjs` cover familiar animals, food, science, places, stories, and everyday facts. These are questions written for this app, not the commercial game's card deck. All 50 are shuffled and used before any repeats; play continues with another shuffle. Restart scores resets only In a Nutshell, including its history and shuffled deck. Returning to All games preserves its round and scores independently of Hues & Cues.
 
 ## Seats and reconnects
 
@@ -55,17 +65,20 @@ Tests cover square scoring boundaries, word validation, choice diversity, comple
 
 In environments that prohibit opening local ports, only the real socket test is skipped (with an explicit reason). The server protocol and HTTP handler still run in memory.
 
-Implementation verification in the restricted workspace: **11 tests passed, 1 real socket test skipped** because TCP listening is blocked. Browser screenshot verification was also blocked by the environment. Syntax checks and the UI's mechanical design checks passed.
+Implementation verification in the restricted workspace: **18 tests passed, 1 real socket test skipped** because TCP listening is blocked. Browser screenshot verification was also blocked by the environment. Syntax checks and the UI's mechanical design checks passed.
 
 ## Files
 
 - `room.mjs`: shared game selection, saved game sessions, action routing.
 - `games/hues.mjs`: Hues & Cues rules, scoring, hints, and private snapshots.
+- `games/nutshell.mjs`: In a Nutshell rules, private word windows, answer matching, and shuffled deck.
+- `games/nutshell-questions.mjs`: 50 original questions and accepted answers, outside the public files.
 - `game.mjs`: compatibility export of the Hues & Cues rules.
 - `server.mjs`: shared room, seat tokens, WebSockets, and static HTTP server.
 - `public/app.js`: shared room, join controls, game shelf, and connection lifecycle.
 - `public/games/catalog.js`: shared public minigame descriptions.
 - `public/games/hues.js`: Hues & Cues browser view and controls.
+- `public/games/nutshell.js`: In a Nutshell word windows, answer form, and controls.
 - `public/ui.js`: small shared browser helpers.
 - `public/`: page layout, styles, and reference board colors.
 - `tests/`: rules, protocol, HTTP, and WebSocket tests.

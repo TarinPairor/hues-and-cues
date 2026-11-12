@@ -8,7 +8,7 @@ web
 Two people playing minigames together from separate browsers.
 
 ## Product Purpose
-Join one shared room and choose a minigame together. Hues & Cues is currently the first and only game: give short word hints, guess a hidden color, and accumulate points.
+Join one shared room and choose a minigame together. Hues & Cues is the first game: give short word hints, guess a hidden color, and accumulate points.
 
 ## Stack
 Node.js and native browser JavaScript with WebSockets, following the nearby tarnkie-society/game pattern requested in the brief.
@@ -20,3 +20,7 @@ Assumed rules pending user feedback: add both guesses to the guesser's score; ex
 
 ## Brand Commitments
 Use the supplied rainbow grid layout and square scoring rings. Colors are sampled directly from the supplied board screenshot.
+
+## In a Nutshell
+
+The second minigame uses 50 original common-knowledge questions. The Nut Picker privately sees the question and answer and chooses individual words to reveal, with at least one visible word. The other player submits one typed answer. Matching ignores case, whitespace, and punctuation and accepts listed alternative answers. A correct answer awards the Nut Picker 1 point for each hidden word; an incorrect answer awards 0. Roles alternate each round, with reveal, history, and a separate score reset. The deck shuffles and uses all 50 questions before repeating. Both minigames share the same room, password `amy`, seats, and reconnect mechanism, while preserving independent scores and progress.

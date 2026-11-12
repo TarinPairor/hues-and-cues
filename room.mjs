@@ -1,8 +1,9 @@
+import { NutshellGame } from './games/nutshell.mjs';
 import { Game as HuesGame } from './games/hues.mjs';
 import { MINIGAMES } from './public/games/catalog.js';
 
 export const SEATS = ['A', 'B'];
-const factories = new Map([['hues-and-cues', () => new HuesGame()]]);
+const factories = new Map([['hues-and-cues', () => new HuesGame()], ['in-a-nutshell', () => new NutshellGame()]]);
 
 // The room owns navigation and game sessions; each game owns its rules and scores.
 export class Room {

@@ -1,6 +1,7 @@
 import { $, escape, playerName } from './ui.js';
 import { MINIGAMES } from './games/catalog.js';
 import { createHuesView } from './games/hues.js';
+import { createNutshellView } from './games/nutshell.js';
 let state = null, socket = null, profile = null, welcomed = false;
 let retryTimer, retry = 0, joining = false;
 let presence = { A: false, B: false };
@@ -15,7 +16,7 @@ function updateJoinControls() {
 function renderPlayers() {
   const seats = ['A', 'B'].filter(seat => presence[seat]);
   $('#joined-count').textContent = `${seats.length} ${seats.length === 1 ? 'player' : 'players'} joined`;
-  $('#player-cards').innerHTML = seats.map(seat => `<div class="player-card" data-player="${seat}"><span class="avatar">${seat === 'A' ? 1 : 2}</span><span class="score-name">${playerName(seat)} joined<small>${state ? `${seat === state.seat ? 'You · ' : ''}${state.activeGame ? (seat === state.giver ? 'Clue giver' : 'Guesser') : 'Ready to play'}` : 'Ready to play'}</small></span>${state?.scores ? `<strong>${state.scores[seat]}<small>points</small></strong>` : ''}</div>`).join('');
+  $('#player-cards').innerHTML = seats.map(seat => `<div class="player-card" data-player="${seat}"><span class="avatar">${seat === 'A' ? 1 : 2}</span><span class="score-name">${playerName(seat)} joined<small>${state ? `${seat === state.seat ? 'You · ' : ''}${state.activeGame ? (seat === state.giver ? (state.activeGame === 'in-a-nutshell' ? 'Nut Picker' : 'Clue giver') : 'Guesser') : 'Ready to play'}` : 'Ready to play'}</small></span>${state?.scores ? `<strong>${state.scores[seat]}<small>points</small></strong>` : ''}</div>`).join('');
 }
 function send(message) {
   if (socket?.readyState !== WebSocket.OPEN || !welcomed) { notice('Connection lost. We’re reconnecting you to the game.'); return false; }
@@ -72,6 +73,7 @@ const bothHere = () => welcomed && presence.A && presence.B;
 
 
 const views = new Map([
+  ['in-a-nutshell', createNutshellView({ send: message => send({ ...message, gameId: 'in-a-nutshell' }), bothHere })],
   ['hues-and-cues', createHuesView({ send: message => send({ ...message, gameId: 'hues-and-cues' }), bothHere })],
 ]);
 function render() {
@@ -79,12 +81,13 @@ function render() {
   $('#join-panel').hidden = Boolean(state); $('#leave').hidden = !state;
   $('#game-library').hidden = Boolean(activeGame);
   $('#hues-game').hidden = activeGame !== 'hues-and-cues';
+  $('#nutshell-game').hidden = activeGame !== 'in-a-nutshell';
+  for (const [id, view] of views) if (id !== activeGame) view.deactivate();
   $('#back-to-games').hidden = !activeGame;
   $('#back-to-games').disabled = !bothHere();
   if (activeGame) {
     views.get(activeGame)?.update(state);
   } else {
-    for (const view of views.values()) view.deactivate();
     $('#round-label').textContent = 'One room. Two players.';
     $('#headline').textContent = 'What shall we play?';
     $('#subline').textContent = 'Pick a minigame and make a little time for each other.';
@@ -96,7 +99,7 @@ function render() {
     button.textContent = state?.savedGames?.includes(button.dataset.selectGame) ? 'Resume game' : 'Play game';
   });
 }
-$('#game-list').innerHTML = MINIGAMES.map(game => `<article class="minigame-card"><div class="game-cover" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="game-details"><h2>${escape(game.name)}</h2><p>${escape(game.description)}</p><div class="game-card-footer"><span>${escape(game.category)} · 2 players</span><button class="button primary" data-select-game="${escape(game.id)}" disabled>Play game</button></div></div></article>`).join('');
+$('#game-list').innerHTML = MINIGAMES.map(game => `<article class="minigame-card"><div class="game-cover ${game.id === 'in-a-nutshell' ? 'nutshell-cover' : ''}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="game-details"><h2>${escape(game.name)}</h2><p>${escape(game.description)}</p><div class="game-card-footer"><span>${escape(game.category)} · 2 players</span><button class="button primary" data-select-game="${escape(game.id)}" disabled>Play game</button></div></div></article>`).join('');
 document.querySelectorAll('[data-select-game]').forEach(button => { button.onclick = () => send({ type: 'select-game', gameId: button.dataset.selectGame }); });
 $('#back-to-games').onclick = () => send({ type: 'show-games' });
 $('#join-open').onclick = () => {
