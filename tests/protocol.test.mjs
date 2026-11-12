@@ -22,6 +22,7 @@ test('server protocol enforces seats, private snapshots, presence, tokens and re
   assert.equal(a.latest().presence.B, false);
   a.act({type:'reroll'}); assert.match(a.latest('error').message, /Both players/);
   b.act({type:'join',password:'amy'}); assert.equal(a.latest().presence.B, true);
+  a.act({type:'select-game',gameId:'hues-and-cues'});
   outsider.act({type:'join',seat:'A',token:'wrong'}); assert.match(outsider.latest('error').message, /expired/);
   const target = a.latest().choices[0]; a.act({type:'choose',cell:target});
   assert.equal(a.latest().target, target); assert.equal(b.latest().target, null);
@@ -75,6 +76,7 @@ test('password join assigns the first available player and publishes only public
   assert.equal(second.latest('welcome').seat, 'B');
   assert.deepEqual(visitor.latest('lobby').presence, {A:true,B:true});
   visitor.act({type:'join',password:'amy'}); assert.match(visitor.latest('error').message, /full/);
+  first.act({type:'select-game',gameId:'hues-and-cues'});
   first.act({type:'choose',cell:app.game.choices[0]});
   assert.equal(visitor.latest(), undefined);
   assert.deepEqual(Object.keys(visitor.latest('lobby')).sort(), ['presence','type']);

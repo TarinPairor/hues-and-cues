@@ -1,20 +1,20 @@
-# Hues for two
+# Minigames for two
 <!-- impeccable:product-schema 1 -->
 
 ## Platform
 web
 
 ## Users
-Two people playing a shared color guessing game from separate browsers.
+Two people playing minigames together from separate browsers.
 
 ## Product Purpose
-Give short word hints, guess a hidden color, reveal it, and accumulate points.
+Join one shared room and choose a minigame together. Hues & Cues is currently the first and only game: give short word hints, guess a hidden color, and accumulate points.
 
 ## Stack
 Node.js and native browser JavaScript with WebSockets, following the nearby tarnkie-society/game pattern requested in the brief.
 
 ## Capabilities and Constraints
-One hardcoded room with password `amy`; Join game reveals a password field, then the server assigns Player 1 or Player 2 automatically (internally A and B). Public lobby presence shows 0, 1, or 2 joined players, with joined players shown as stacked cards. 16 rows A–P and 30 columns. Four distinct random color choices for the clue giver. First hint: one word. Second hint: at most two words. One guess after each hint. Server validates turns and hints and keeps the target private until reveal. Restart resets scores. Reconnect restores a seat with a browser session token.
+One hardcoded room with password `amy`; Join game reveals a password field, then the server assigns Player 1 or Player 2 automatically (internally A and B). Both players first see a game shelf; either can select a minigame for both. All games returns both to the shelf without losing the round or scores. Public lobby presence shows 0, 1, or 2 joined players, with joined players shown as stacked cards. 16 rows A–P and 30 columns. Four distinct random color choices for the clue giver. First hint: one word. Second hint: at most two words. One guess after each hint. Server validates turns and hints and keeps the target private until reveal. Restart resets scores. Reconnect restores a seat with a browser session token.
 
 Assumed rules pending user feedback: add both guesses to the guesser's score; exact = 3, square distance one = 2, distance two = 1, farther = 0; alternate clue giver each round. Scores and seats live in server memory and reset when the server restarts.
 

@@ -27,13 +27,14 @@ test('two real WebSocket clients play, protect secrets, reconnect, and reset', a
     throw error;
   }
   const port = app.server.address().port, url = `ws://127.0.0.1:${port}/ws`;
-  const response = await fetch(`http://127.0.0.1:${port}`); assert.equal(response.status, 200); assert.match(await response.text(), /Hues &amp; cues|Hues & cues/);
+  const response = await fetch(`http://127.0.0.1:${port}`); assert.equal(response.status, 200); assert.match(await response.text(), /Hues &amp; Cues|Hues and Cues/);
   assert.equal((await fetch(`http://127.0.0.1:${port}/game.mjs`)).status, 404);
   const a = await client(url), b = await client(url);
   let welcome = a.wait(m => m.type === 'welcome'); a.send({ type: 'join', password: 'amy' }); const identity = await welcome;
   const error = a.wait(m => m.type === 'error'); a.send({ type: 'reroll' }); assert.match((await error).message, /Both players/);
   let update = b.wait(m => m.type === 'state'); b.send({ type: 'join', password: 'amy' }); await update;
   const intruder = await client(url); const rejected = intruder.wait(m => m.type === 'error'); intruder.send({ type: 'join', password: 'amy' }); assert.match((await rejected).message, /full/); intruder.ws.close();
+  update = b.wait(m => m.activeGame === 'hues-and-cues'); a.send({type:'select-game',gameId:'hues-and-cues'}); await update;
   const target = app.game.choices[0];
   update = b.wait(m => m.stage === 'hint1'); a.send({ type: 'choose', cell: target }); const hidden = await update;
   assert.equal(hidden.target, null); assert.deepEqual(hidden.choices, []);

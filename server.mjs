@@ -4,10 +4,10 @@ import { randomBytes } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
-import { Game, SEATS } from './game.mjs';
+import { Room, SEATS } from './room.mjs';
 
 export function createGameServer() {
-  const game = new Game(), players = new Map();
+  const room = new Room(), players = new Map();
   const root = fileURLToPath(new URL('./public/', import.meta.url));
   const server = http.createServer(async (req, res) => {
     try {
@@ -28,7 +28,7 @@ export function createGameServer() {
   const broadcast = () => {
     for (const client of wss.clients) send(client, lobbySnapshot());
     const presence = Object.fromEntries(SEATS.map(seat => [seat, players.get(seat)?.ws?.readyState === WebSocket.OPEN]));
-    for (const [seat, player] of players) if (player.ws) send(player.ws, { ...game.snapshot(seat), presence });
+    for (const [seat, player] of players) if (player.ws) send(player.ws, { ...room.snapshot(seat), presence });
   };
   server.on('upgrade', (req, socket, head) => {
     let sameOrigin = true;
@@ -69,7 +69,7 @@ export function createGameServer() {
           players.delete(ws.seat); ws.seat = null; broadcast(); return;
         }
         if (SEATS.some(seat => players.get(seat)?.ws?.readyState !== WebSocket.OPEN)) throw new Error('Both players need to be connected to play.');
-        game.act(ws.seat, message); broadcast();
+        room.act(ws.seat, message); broadcast();
       } catch (error) { send(ws, { type: 'error', message: error instanceof SyntaxError ? 'Invalid message.' : error.message }); }
     });
     ws.on('close', () => { if (players.get(ws.seat)?.ws === ws) players.get(ws.seat).ws = null; broadcast(); });
@@ -79,10 +79,10 @@ export function createGameServer() {
   }, 15000); heartbeat.unref();
   const shutdown = () => { clearInterval(heartbeat); for (const ws of wss.clients) ws.terminate(); wss.close(); };
   server.on('close', shutdown);
-  return { server, wss, game, players, shutdown };
+  return { server, wss, room, players, shutdown, get game() { return room.games.get('hues-and-cues'); } };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const port = Number(process.env.PORT || 5173);
   const { server } = createGameServer();
-  server.listen(port, '0.0.0.0', () => console.log(`Hues for two is ready at http://localhost:${port}`));
+  server.listen(port, '0.0.0.0', () => console.log(`Minigames for two is ready at http://localhost:${port}`));
 }

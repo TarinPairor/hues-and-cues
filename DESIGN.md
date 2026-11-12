@@ -1,4 +1,4 @@
-# Hues & cues design
+# Minigames for two design
 
 The supplied physical board is the visual authority: a dark backing, black gutters, A–P and 1–30 coordinates on all four edges, and all 480 reference colors. No generated hues replace the source colors. The surrounding interface recedes so the board is the dominant element.
 
@@ -22,3 +22,7 @@ Buttons have hover, focus, and disabled states. Hint counts update while typing.
 ## Verification limit
 
 Mechanical UI checks passed. Live desktop/mobile screenshot review could not run because this environment prevented Chrome from launching and prohibited listening on local TCP ports. No rendered visual pass is claimed.
+
+## Shared room and game shelf
+
+The shared shell uses the same lavender surfaces and stacked player cards. The default view is a game shelf with one Hues & Cues card, illustrated by a strip of color swatches. No unavailable games are listed. Join and password controls belong to the room. Either joined player can launch a game once both are connected; server state controls navigation for both players. The card changes from Play game to Resume game after the first launch. All games returns to the shelf, with seats, scores, and rounds preserved. Game-specific views and rules live in separate modules.

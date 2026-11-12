@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#eeeaf4">
-  <meta name="description" content="One color, two minds. A live color guessing game for two people.">
-  <title>Hues & cues — for two</title>
+  <meta name="description" content="A shared room of minigames for two. Join your person and choose what to play.">
+  <title>Minigames — for two</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="app">
     <header class="masthead">
-      <a class="brand" href="/" aria-label="Hues and cues home"><span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>hues <em>&</em> cues<span class="brand-note">a little game for two.</span></span></a>
-      <div class="header-actions"><span id="connection" class="connection">One shared room</span><button id="rules-open" class="button quiet">How to play <span aria-hidden="true">?</span></button><button id="leave" class="button quiet" hidden>Leave game</button></div>
+      <a class="brand" href="/" aria-label="Minigames for two home"><span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>minigames<span class="brand-note">a little time for two.</span></span></a>
+      <div class="header-actions"><span id="connection" class="connection">One shared room</span><button id="back-to-games" class="button quiet" hidden>All games</button><button id="rules-open" class="button quiet">How to play <span aria-hidden="true">?</span></button><button id="leave" class="button quiet" hidden>Leave game</button></div>
     </header>
     <main>
       <section class="game-top" aria-label="Game status">
-        <div><p class="round-label" id="round-label">A meeting of colorful minds</p><h1 id="headline">Same color. Different clues.</h1><p id="subline" class="subline">One of you knows the color. The other connects the dots.</p></div>
+        <div><p class="round-label" id="round-label">One room. Two players.</p><h1 id="headline">What shall we play?</h1><p id="subline" class="subline">Pick a minigame and make a little time for each other.</p></div>
         <section class="player-lobby" aria-label="Players" aria-live="polite"><p id="joined-count" class="joined-count">0 players joined</p><div id="player-cards" class="player-cards"></div></section>
       </section>
       <section id="join-panel" class="join-panel" aria-labelledby="join-title"><div><h2 id="join-title">Play together.</h2><p>Join the game, then share this address with your person.</p></div><div class="join-actions"><button id="join-open" class="button primary">Join game</button><form id="join-form" class="join-form" hidden><label for="join-password">Password</label><div class="join-fields"><input id="join-password" type="password" autocomplete="current-password" required maxlength="80" aria-describedby="join-error"><button id="join-submit" class="button primary" type="submit">Join game</button></div><p id="join-error" class="join-error" role="alert" hidden></p></form></div></section>
       <div id="notice" class="notice" role="status" hidden></div>
+      <section id="game-library" class="game-library" aria-label="Choose a minigame"><div class="library-heading"><h2>Your game shelf</h2><p id="library-status">Join the room to choose a game.</p></div><div id="game-list" class="game-list"></div></section>
+      <section id="hues-game" aria-label="Hues and Cues" hidden>
       <div class="play-layout">
         <section class="board-section" aria-labelledby="board-title">
           <div class="board-heading"><h2 id="board-title">The color board <span>480 possibilities. One connection.</span></h2><span id="hover-coordinate" class="coordinate">A1 — P30</span></div>
@@ -31,10 +33,11 @@
       </div>
       <section class="below-board"><div class="scoring-explainer"><div id="mini-scoring" class="mini-scoring" aria-hidden="true"></div><div><h2>Close counts.</h2><p><strong>3</strong> exact · <strong>2</strong> one square away · <strong>1</strong> two away</p></div></div><button id="restart" class="button quiet" disabled>Restart scores <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button></section>
       <section id="history-section" class="history-section" hidden><h2>A little color history</h2><div id="history" class="history"></div></section>
+      </section>
     </main>
-    <footer class="site-footer"><span>Less mind reading. More color feeling.</span><span>Made for a party of two.</span></footer>
+    <footer class="site-footer"><span>A little friendly competition.</span><span>Made for a party of two.</span></footer>
   </div>
-  <dialog id="rules-dialog"><button class="dialog-close button quiet" data-close="rules-dialog" aria-label="Close instructions">Close</button><h2>Find their color.</h2><p>You’re always in the same room. Select Join game and enter the password. The first person is Player 1, and the next is Player 2.</p><ol><li><strong>Pick a color.</strong> The clue giver gets four different swatches. Shuffle them, then choose one in secret.</li><li><strong>One word.</strong> Send a one-word hint. Your partner picks a square and locks in their first guess.</li><li><strong>One or two words.</strong> Send a second hint. Your partner locks in a second guess.</li><li><strong>The big reveal.</strong> Each guess earns 3 for exact, 2 within one square, or 1 within two squares. Diagonals count. Points go to the guesser.</li></ol><p>Swap roles each round. Keep playing as long as you like. Restart scores to start fresh.</p><p class="muted">Hyphens separate words. Scores stay while the server runs. Use separate browsers, devices, or private windows to play both seats on one computer.</p></dialog>
+  <dialog id="rules-dialog"><button class="dialog-close button quiet" data-close="rules-dialog" aria-label="Close instructions">Close</button><h2>Play together.</h2><p>You’re always in the same room. Select Join game and enter the password. The first person is Player 1, and the next is Player 2. Once you’re both here, either player can choose a minigame. Use All games to return to the shelf and resume later.</p><h3>Hues &amp; Cues</h3><ol><li><strong>Pick a color.</strong> The clue giver gets four different swatches. Shuffle them, then choose one in secret.</li><li><strong>One word.</strong> Send a one-word hint. Your partner picks a square and locks in their first guess.</li><li><strong>One or two words.</strong> Send a second hint. Your partner locks in a second guess.</li><li><strong>The big reveal.</strong> Each guess earns 3 for exact, 2 within one square, or 1 within two squares. Diagonals count. Points go to the guesser.</li></ol><p>Swap roles each round. Keep playing as long as you like. Restart scores to start fresh.</p><p class="muted">Hyphens separate words. Scores stay while the server runs. Use separate browsers, devices, or private windows to play both seats on one computer.</p></dialog>
   <dialog id="restart-dialog"><h2>A fresh start?</h2><p>This resets both scores and the current round. Player 1 will give the first clue.</p><div class="dialog-actions"><button class="button quiet" data-close="restart-dialog">Keep playing</button><button id="confirm-restart" class="button primary">Restart game</button></div></dialog>
   <script type="module" src="/app.js"></script>
 </body>

@@ -1,6 +1,6 @@
-# Hues & cues — for two
+# Minigames — for two
 
-A two-player color guessing game with one shared room, live WebSockets, and a 16 × 30 board sampled from the supplied reference image.
+A shared two-player minigame room with live WebSockets. Hues & Cues is the first and currently only minigame, with a 16 × 30 board sampled from the supplied reference image.
 
 ## Run
 
@@ -23,7 +23,11 @@ PORT=3000 npm start
 
 This needs a running Node server with WebSocket support. A static file server or static-only hosting cannot synchronize the game. When putting it behind a reverse proxy, forward `/ws` with WebSocket upgrades; HTTPS pages automatically use secure WebSockets.
 
-## Play
+## Choose a game
+
+Once both players have joined, either player can select **Hues & Cues** from the game shelf. Selection opens the game for both players. **All games** brings both players back to the shelf while preserving the round and scores. Select **Resume game** to continue. Sessions remain in memory while the server runs.
+
+## Play Hues & Cues
 
 1. Player 1 starts as clue giver. Choose one of four random, visually separated colors, or shuffle for four new options. Only the clue giver receives the options and target.
 2. Send a **one-word** hint. The guesser selects a board square and locks in their first guess.
@@ -51,11 +55,25 @@ Tests cover square scoring boundaries, word validation, choice diversity, comple
 
 In environments that prohibit opening local ports, only the real socket test is skipped (with an explicit reason). The server protocol and HTTP handler still run in memory.
 
-Implementation verification in the restricted workspace: **9 tests passed, 1 real socket test skipped** because TCP listening is blocked. Browser screenshot verification was also blocked by the environment. Syntax checks and the UI's mechanical design checks passed.
+Implementation verification in the restricted workspace: **11 tests passed, 1 real socket test skipped** because TCP listening is blocked. Browser screenshot verification was also blocked by the environment. Syntax checks and the UI's mechanical design checks passed.
 
 ## Files
 
-- `game.mjs`: game rules, scoring, hint validation, private state snapshots.
+- `room.mjs`: shared game selection, saved game sessions, action routing.
+- `games/hues.mjs`: Hues & Cues rules, scoring, hints, and private snapshots.
+- `game.mjs`: compatibility export of the Hues & Cues rules.
 - `server.mjs`: shared room, seat tokens, WebSockets, and static HTTP server.
-- `public/`: responsive browser interface and reference board colors.
+- `public/app.js`: shared room, join controls, game shelf, and connection lifecycle.
+- `public/games/catalog.js`: shared public minigame descriptions.
+- `public/games/hues.js`: Hues & Cues browser view and controls.
+- `public/ui.js`: small shared browser helpers.
+- `public/`: page layout, styles, and reference board colors.
 - `tests/`: rules, protocol, HTTP, and WebSocket tests.
+
+## Add a minigame
+
+1. Add its public ID, name, description, and category to `public/games/catalog.js`.
+2. Add its server class in `games/`, implementing `act(seat, message)` and `snapshot(seat)`. Keep private information out of the other player's snapshot. Register its factory in `room.mjs`.
+3. Add its browser view in `public/games/`, with `update(state)` and `deactivate()` methods, and its HTML section. Register the view and section visibility in `public/app.js`. Pass game actions through `send` with the minigame's ID.
+
+The server owns selection for both players. The room retains one session per game. Seat tokens and passwords belong to the shared room; individual games own their rules, scores, and round history.
