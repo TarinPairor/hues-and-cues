@@ -11,4 +11,10 @@ export const MINIGAMES = [
     description: 'A familiar question, with a few words missing. Hide more words, take a bigger risk, and see if your person can crack it.',
     category: 'Word guessing',
   },
+  {
+    id: 'guess-who',
+    name: 'Guess Who',
+    description: 'Twenty-four faces. One secret each. Ask clever questions, narrow the field, and find your person.',
+    category: 'Deduction',
+  },
 ];

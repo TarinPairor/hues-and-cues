@@ -25,8 +25,14 @@ Mechanical UI checks passed. Live desktop/mobile screenshot review could not run
 
 ## Shared room and game shelf
 
-The shared shell uses the same lavender surfaces and stacked player cards. The default view is a game shelf with Hues & Cues and In a Nutshell cards, illustrated by a strip of color swatches. No unavailable games are listed. Join and password controls belong to the room. Either joined player can launch a game once both are connected; server state controls navigation for both players. The card changes from Play game to Resume game after the first launch. All games returns to the shelf, with seats, scores, and rounds preserved. Game-specific views and rules live in separate modules.
+The shared shell uses the same lavender surfaces and stacked player cards. The default view is a game shelf with Hues & Cues, In a Nutshell, and Guess Who cards, illustrated by a strip of color swatches. No unavailable games are listed. Join and password controls belong to the room. Either joined player can launch a game once both are connected; server state controls navigation for both players. The card changes from Play game to Resume game after the first launch. All games returns to the shelf, with seats, scores, and rounds preserved. Game-specific views and rules live in separate modules.
 
 ## In a Nutshell windows
 
 The supplied box photograph defines the game's surface: a muted burgundy box, numbered vertical windows, pale yellow word strips, and cool white sliding tabs. The digital board keeps that structure, with a private answer strip at the bottom for the Nut Picker. Tapping a word switches its reveal state; visible and hidden labels accompany the visual tab position. The guesser receives null placeholders for hidden words until the reveal. Desktop pairs the question box with a turn panel; below 800px the turn panel follows the box. A separate restart dialog names this game's reset. The shelf uses pale question-window strips to distinguish its card from the Hues color strips.
+
+## Guess Who board
+
+Guess Who keeps the board-and-turn-panel composition, lavender shell, and player score cards. A sage tray holds 24 original character cards in six columns on large screens, four on medium screens, and three on phones. Geometric portraits use a consistent shape vocabulary and accessories taken from shared trait data. Cards have readable names, trait labels, selected borders, and an explicit Eliminated label. Eliminations are private and reversible.
+
+The turn panel presents secret selection, asking, answering, final-guess confirmation, and reveal. A private secret card stays above it; a question trail sits below. Final guesses require a second deliberate action after selecting the face, with the wrong-guess consequence stated beside the button. The shelf card uses miniature character portraits. Keyboard focus stays on the card after an elimination update, and reduced-motion preferences use the shared stylesheet behavior.

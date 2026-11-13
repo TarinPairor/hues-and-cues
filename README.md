@@ -1,6 +1,6 @@
 # Minigames — for two
 
-A shared two-player minigame room with live WebSockets. Choose Hues & Cues or In a Nutshell. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has separate question decks: 50 hard questions for Player 1 to answer and 50 very easy questions for Player 2 to answer.
+A shared two-player minigame room with live WebSockets. Choose Hues & Cues, In a Nutshell, or Guess Who. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has separate question decks: 50 hard questions for Player 1 to answer and 50 very easy questions for Player 2 to answer.
 
 ## Run
 
@@ -25,7 +25,7 @@ This needs a running Node server with WebSocket support. A static file server or
 
 ## Choose a game
 
-Once both players have joined, either player can select **Hues & Cues** or **In a Nutshell** from the game shelf. Selection opens the game for both players. **All games** brings both players back to the shelf while preserving the round and scores. Select **Resume game** to continue. Sessions remain in memory while the server runs.
+Once both players have joined, either player can select **Hues & Cues**, **In a Nutshell**, or **Guess Who** from the game shelf. Selection opens the game for both players. **All games** brings both players back to the shelf while preserving the round and scores. Select **Resume game** to continue. Sessions remain in memory while the server runs.
 
 ## Play Hues & Cues
 
@@ -49,6 +49,17 @@ On a phone the full board scrolls horizontally so similar colors remain individu
 
 Difficulty follows the **guesser**: Player 1 answers hard questions from `games/nutshell-questions.mjs`, while Player 2 answers very easy questions from `games/nutshell-easy-questions.mjs`. Each bank has 50 original questions. This means Player 1, as Nut Picker, sees an easy question for Player 2; Player 2, as Nut Picker, sees a hard question for Player 1. Each deck shuffles independently and uses all 50 before repeating. Restart scores resets both decks, scores, and history for In a Nutshell only. Returning to All games preserves progress independently of Hues & Cues.
 
+## Play Guess Who
+
+1. Each player selects one of 24 original characters and locks it as their secret. Only its owner receives that choice. Both players may choose the same character.
+2. Once both are ready, Player 1 asks first. Type a yes/no question about the other player's character. The other player answers **Yes** or **No**, honestly, using their own private character card. Answers are given by the player rather than automatically inferred from free text.
+3. After the answer, the other player gets the next question. Use hair color or length, glasses, hats, beards, earrings, and other visible details to narrow the possibilities. Trait labels clarify each portrait.
+4. Tap faces to eliminate or restore them on **your private board**. Eliminations are manual, can be changed while either player is thinking, and survive reconnects.
+5. On your turn, instead of asking a question, select **Make a final guess**, pick a face, and confirm its name. A correct final guess wins you **1 point**. A wrong final guess gives your opponent **1 point** and ends the round.
+6. Both secret characters are revealed. Next round clears the boards and secrets and alternates who asks first. Restart scores resets only Guess Who.
+
+The character roster and geometric portraits are defined in `public/games/guess-who-characters.js`. Returning to All games preserves this game's secrets, private eliminations, pending question, and score independently of the other games.
+
 ## Seats and reconnects
 
 There is one hardcoded room with exactly two players, displayed as Player 1 and Player 2 (internally A and B). The server checks the hardcoded password `amy` and assigns the first disconnected or unused seat; clients cannot choose a player number. Each seat gets a random reconnect token saved in session storage. Refreshing or reconnecting preserves the seat, score, and round. Opening the same seat session in another tab transfers that seat to the new connection.
@@ -65,12 +76,13 @@ Tests cover square scoring boundaries, word validation, choice diversity, comple
 
 In environments that prohibit opening local ports, only the real socket test is skipped (with an explicit reason). The server protocol and HTTP handler still run in memory.
 
-Implementation verification in the restricted workspace: **18 tests passed, 1 real socket test skipped** because TCP listening is blocked. Browser screenshot verification was also blocked by the environment. Syntax checks and the UI's mechanical design checks passed.
+Implementation verification in the restricted workspace: **25 tests passed, 1 real socket test skipped** because TCP listening is blocked. Browser screenshot verification was also blocked by the environment. Syntax checks and the UI's mechanical design checks passed.
 
 ## Files
 
 - `room.mjs`: shared game selection, saved game sessions, action routing.
 - `games/hues.mjs`: Hues & Cues rules, scoring, hints, and private snapshots.
+- `games/guess-who.mjs`: secret characters, turns, private eliminations, and win scoring.
 - `games/nutshell.mjs`: In a Nutshell rules, private word windows, answer matching, and shuffled deck.
 - `games/nutshell-questions.mjs`: 50 hard questions and the bank assignment by guesser.
 - `games/nutshell-easy-questions.mjs`: 50 very easy questions for Player 2. Both banks stay outside the public files.
@@ -79,6 +91,8 @@ Implementation verification in the restricted workspace: **18 tests passed, 1 re
 - `public/app.js`: shared room, join controls, game shelf, and connection lifecycle.
 - `public/games/catalog.js`: shared public minigame descriptions.
 - `public/games/hues.js`: Hues & Cues browser view and controls.
+- `public/games/guess-who.js`: Guess Who board, questions, secret card, and final guesses.
+- `public/games/guess-who-characters.js`: 24 original characters and their portraits and traits.
 - `public/games/nutshell.js`: In a Nutshell word windows, answer form, and controls.
 - `public/ui.js`: small shared browser helpers.
 - `public/`: page layout, styles, and reference board colors.
