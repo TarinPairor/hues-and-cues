@@ -14,7 +14,7 @@ export const MINIGAMES = [
   {
     id: 'guess-who',
     name: 'Guess Who',
-    description: 'Twenty-four faces. One secret each. Ask clever questions, narrow the field, and find your person.',
+    description: 'Twenty-four famous faces. One secret each. Ask clever questions and identify your person from politics, tech, and pop culture.',
     category: 'Deduction',
   },
 ];

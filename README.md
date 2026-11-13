@@ -1,6 +1,6 @@
 # Minigames — for two
 
-A shared two-player minigame room with live WebSockets. Choose Hues & Cues, In a Nutshell, or Guess Who. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell has separate question decks: 50 hard questions for Player 1 to answer and 50 very easy questions for Player 2 to answer.
+A shared two-player minigame room with live WebSockets. Choose Hues & Cues, In a Nutshell, or Guess Who. Hues & Cues has a 16 × 30 color board sampled from the supplied reference image; In a Nutshell uses 50 hard questions for both players, with independently shuffled decks.
 
 ## Run
 
@@ -47,18 +47,18 @@ On a phone the full board scrolls horizontally so similar colors remain individu
 4. If correct, the **Nut Picker earns 1 point per hidden word**. A wrong answer earns 0. Revealing every word means 0 points even for a correct answer.
 5. Reveal the full question, submitted answer, correct answer, and points. Next round swaps Nut Picker and guesser.
 
-Difficulty follows the **guesser**: Player 1 answers hard questions from `games/nutshell-questions.mjs`, while Player 2 answers very easy questions from `games/nutshell-easy-questions.mjs`. Each bank has 50 original questions. This means Player 1, as Nut Picker, sees an easy question for Player 2; Player 2, as Nut Picker, sees a hard question for Player 1. Each deck shuffles independently and uses all 50 before repeating. Restart scores resets both decks, scores, and history for In a Nutshell only. Returning to All games preserves progress independently of Hues & Cues.
+Both players answer hard questions from the same 50-question bank in `games/nutshell-questions.mjs`. Each player's deck shuffles independently and uses all 50 before repeating. Restart scores resets both decks, scores, and history for In a Nutshell only. Returning to All games preserves progress independently of the other games.
 
 ## Play Guess Who
 
-1. Each player selects one of 24 original characters and locks it as their secret. Only its owner receives that choice. Both players may choose the same character.
+1. Each player selects one of 24 public figures and locks it as their secret. Only its owner receives that choice. Both players may choose the same character.
 2. Once both are ready, Player 1 asks first. Type a yes/no question about the other player's character. The other player answers **Yes** or **No**, honestly, using their own private character card. Answers are given by the player rather than automatically inferred from free text.
-3. After the answer, the other player gets the next question. Use hair color or length, glasses, hats, beards, earrings, and other visible details to narrow the possibilities. Trait labels clarify each portrait.
+3. After the answer, the other player gets the next question. Use visible details in the photo, careers, and well-known public facts to narrow the possibilities. Cards show names and broad career categories; players answer questions themselves.
 4. Tap faces to eliminate or restore them on **your private board**. Eliminations are manual, can be changed while either player is thinking, and survive reconnects.
 5. On your turn, instead of asking a question, select **Make a final guess**, pick a face, and confirm its name. A correct final guess wins you **1 point**. A wrong final guess gives your opponent **1 point** and ends the round.
 6. Both secret characters are revealed. Next round clears the boards and secrets and alternates who asks first. Restart scores resets only Guess Who.
 
-The character roster and geometric portraits are defined in `public/games/guess-who-characters.js`. Returning to All games preserves this game's secrets, private eliminations, pending question, and score independently of the other games.
+The 24-person public-figure roster and real photo URLs are defined in `public/games/guess-who-characters.js`. Photos load directly from Wikimedia Commons; the in-game Photo credits lists each creator, source file, and license. Photos are cropped to fit the cards. Browser network access to Wikimedia is needed for the photos; local photo downloads and rendered browser verification were unavailable in this restricted workspace. Returning to All games preserves this game's secrets, private eliminations, pending question, and score independently of the other games.
 
 ## Seats and reconnects
 
@@ -84,15 +84,14 @@ Implementation verification in the restricted workspace: **25 tests passed, 1 re
 - `games/hues.mjs`: Hues & Cues rules, scoring, hints, and private snapshots.
 - `games/guess-who.mjs`: secret characters, turns, private eliminations, and win scoring.
 - `games/nutshell.mjs`: In a Nutshell rules, private word windows, answer matching, and shuffled deck.
-- `games/nutshell-questions.mjs`: 50 hard questions and the bank assignment by guesser.
-- `games/nutshell-easy-questions.mjs`: 50 very easy questions for Player 2. Both banks stay outside the public files.
+- `games/nutshell-questions.mjs`: 50 hard questions shared by both players, outside public files.
 - `game.mjs`: compatibility export of the Hues & Cues rules.
 - `server.mjs`: shared room, seat tokens, WebSockets, and static HTTP server.
 - `public/app.js`: shared room, join controls, game shelf, and connection lifecycle.
 - `public/games/catalog.js`: shared public minigame descriptions.
 - `public/games/hues.js`: Hues & Cues browser view and controls.
 - `public/games/guess-who.js`: Guess Who board, questions, secret card, and final guesses.
-- `public/games/guess-who-characters.js`: 24 original characters and their portraits and traits.
+- `public/games/guess-who-characters.js`: 24 public figures, real photo URLs, career categories, and photo credits.
 - `public/games/nutshell.js`: In a Nutshell word windows, answer form, and controls.
 - `public/ui.js`: small shared browser helpers.
 - `public/`: page layout, styles, and reference board colors.

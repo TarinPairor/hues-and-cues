@@ -9,6 +9,8 @@ function finish(game, answer = game.snapshot(game.giver).answer) { reveal(game);
 
 test('50 original questions have usable answers, with no duplicate questions', () => {
   assert.equal(QUESTIONS.length, 50);
+  assert.equal(QUESTION_BANKS.A, QUESTIONS);
+  assert.equal(QUESTION_BANKS.B, QUESTIONS);
   assert.equal(QUESTION_BANKS.B.length, 50);
   assert.equal(new Set(QUESTION_BANKS.B.map(card => card.question)).size, 50);
   assert.ok(QUESTION_BANKS.B.every(card => card.answers.length && card.answers.every(answer => answer.trim())));
@@ -54,7 +56,7 @@ test('roles, word selections, answer validation and locked selections are enforc
   for (const text of ['', '   ', '!!!', null, 'a'.repeat(121)]) assert.throws(() => game.act('B', {type:'answer',text}));
   assert.equal(game.stage, 'guess');
 });
-test('each guesser gets their own difficulty with no repeats until all 50 questions are used', () => {
+test('both guessers receive hard questions with independent decks and no repeats within each deck', () => {
   const game = new NutshellGame(), seen = { A: new Set(), B: new Set() };
   for (let i = 0; i < 100; i++) {
     const question = game.snapshot(game.giver).words.join(' ');

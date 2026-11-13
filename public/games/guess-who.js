@@ -13,7 +13,7 @@ export function createGuessWhoView({send,bothHere}) {
     const eliminated = new Set(state.eliminated);
     $('#round-label').textContent = `Guess Who · Round ${state.round}`;
     $('#headline').textContent = finished ? `${state.result.winner === state.seat ? 'You found your win.' : 'Mystery solved.'}` : choosing ? 'A familiar face. A little mystery.' : 'Every question narrows it down.';
-    $('#subline').textContent = finished ? `${playerName(state.result.winner)} wins this round and earns 1 point.` : 'Keep your person secret. Find theirs before they find yours.';
+    $('#subline').textContent = finished ? `${playerName(state.result.winner)} wins this round and earns 1 point.` : 'Famous faces. Questionable poker faces. Find theirs before they find yours.';
     $('#who-board-title').textContent = selectingSecret ? 'Choose your secret character' : guessing ? 'Choose your final guess' : 'Your character board';
     $('#who-count').textContent = `${CHARACTERS.length - eliminated.size} of ${CHARACTERS.length} remaining`;
     $('#who-board-note').textContent = selectingSecret ? 'Choose a character, then lock it in. Only you will see your choice.' : guessing ? 'Select a face, then confirm your final guess in the turn panel.' : finished ? 'Both secret characters are revealed below.' : choosing ? 'Your character is locked. Waiting for the other player.' : 'Tap a character to eliminate or restore it. Your eliminations are private.';
@@ -39,7 +39,7 @@ export function createGuessWhoView({send,bothHere}) {
     } else if (myTurn() && guessing) {
       content = `<h2>Ready to name them?</h2><p class="turn-description">Pick a character on the board, then confirm below.</p>${selected ? `<div class="who-selected">${portrait(selected)}<strong>${selected.name}</strong></div>` : ''}<p class="who-risk">Correct: you win 1 point. Wrong: your person wins 1 point.</p><button id="who-confirm-guess" class="button primary" ${!selected ? 'disabled' : ''}>${selected ? `Guess ${selected.name}` : 'Choose a character'}</button><button id="who-cancel-guess" class="button quiet">Keep asking questions</button>`;
     } else if (myTurn()) {
-      content = `<h2>Ask a little. Learn a lot.</h2><p class="turn-description">Ask one yes/no question about their character. They’ll answer before their turn begins.</p><form id="who-ask-form" class="hint-form"><label for="who-question-input">Your question</label><input id="who-question-input" maxlength="160" required autocomplete="off" placeholder="Do they wear glasses?" value="${escape(draft)}"><p class="nutshell-input-note">Try hair, a hat, glasses, a beard, or earrings.</p><button class="button primary" type="submit">Ask question</button></form><button id="who-guess-mode" class="button quiet">Make a final guess</button>`;
+      content = `<h2>Ask a little. Learn a lot.</h2><p class="turn-description">Ask one yes/no question about their character. They’ll answer before their turn begins.</p><form id="who-ask-form" class="hint-form"><label for="who-question-input">Your question</label><input id="who-question-input" maxlength="160" required autocomplete="off" placeholder="Do they wear glasses?" value="${escape(draft)}"><p class="nutshell-input-note">Try their photo, career, or something they’re known for.</p><button class="button primary" type="submit">Ask question</button></form><button id="who-guess-mode" class="button quiet">Make a final guess</button>`;
     } else {
       content = `<h2>Their turn to wonder.</h2><p class="turn-description">${playerName(opponent())} is thinking of a question. Keep narrowing your board while you wait.</p>`;
     }
@@ -63,6 +63,7 @@ export function createGuessWhoView({send,bothHere}) {
     $('#who-history-section').hidden = !state.history.length;
     $('#who-history').innerHTML = state.history.map(item => `<div class="nutshell-history-item"><div><p>${playerName(item.winner)} won round ${item.round}</p><small>Player 1: ${characterById(item.secrets.A).name} · Player 2: ${characterById(item.secrets.B).name}</small></div><strong>+1</strong></div>`).join('');
   }
+  $('#who-photo-credits').innerHTML = CHARACTERS.map(character => `<p><strong>${escape(character.name)}</strong><br>${escape(character.author)} · <a href="${escape(character.source)}" target="_blank" rel="noopener noreferrer">Photo source</a> · <a href="${escape(character.licenseUrl)}" target="_blank" rel="noopener noreferrer">${escape(character.license)}</a></p>`).join('');
   $('#who-restart').onclick = () => $('#who-restart-dialog').showModal();
   $('#who-confirm-restart').onclick = () => { if (send({type:'restart'})) { selection = null; guessing = false; draft = ''; roundKey = ''; $('#who-restart-dialog').close(); } };
   return {

@@ -1,37 +1,249 @@
-// Shared, original character roster. Only the server stores each player's choice.
-const names = ['Alex','Bea','Cleo','Dev','Eli','Finn','Gia','Hugo','Iris','Jules','Kai','Lena','Milo','Nia','Omar','Pia','Quinn','Remy','Sage','Tess','Uma','Vic','Wren','Zoe'];
-const hairColors = ['black','brown','blond','red','gray','bald'];
-export const CHARACTERS = names.map((name, i) => ({
-  id: name.toLowerCase(), name,
-  hair: hairColors[i % 6], longHair: i % 6 !== 5 && Math.floor(i / 6) % 2 === 1,
-  glasses: i % 2 === 0, hat: i % 3 === 0,
-  beard: [1,4,9,12,17,22].includes(i), earrings: i % 3 === 2,
-  skin: ['#f1c7a2','#c58c66','#8b5c43'][Math.floor(i / 2) % 3],
-  shirt: ['#725eac','#2b8d85','#ce6b77','#c28a37'][Math.floor(i / 6)],
-}));
+// Public-figure photo roster. Choices remain private in the server's game state.
+export const CHARACTERS = [
+  {
+    "name": "Jeffrey Epstein",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Jeffrey_Epstein_mug_shot_%28cropped%29.jpg/330px-Jeffrey_Epstein_mug_shot_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Jeffrey_Epstein_mug_shot_%28cropped%29.jpg",
+    "author": "Palm Beach County Sheriff's Department",
+    "license": "Public domain",
+    "id": "jeffrey-epstein",
+    "tag": "Finance",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  {
+    "name": "Elon Musk",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Elon_Musk_-_54820081119_%283x4_cropped%2C_Rule_of_thirds%29.jpg/330px-Elon_Musk_-_54820081119_%283x4_cropped%2C_Rule_of_thirds%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Elon_Musk_-_54820081119_%283x4_cropped%2C_Rule_of_thirds%29.jpg",
+    "author": "Gage Skidmore",
+    "license": "CC BY-SA 4.0",
+    "id": "elon-musk",
+    "tag": "Tech",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "name": "Donald Trump",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg/330px-Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg",
+    "author": "Daniel Torok (1983–)",
+    "license": "Public domain",
+    "id": "donald-trump",
+    "tag": "Politics",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  {
+    "name": "Jensen Huang",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jensen_Huang_Stanford_2026-04-30_010_%28cropped%29.jpg/330px-Jensen_Huang_Stanford_2026-04-30_010_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Jensen_Huang_Stanford_2026-04-30_010_%28cropped%29.jpg",
+    "author": "Anderseidesvik",
+    "license": "CC BY-SA 4.0",
+    "id": "jensen-huang",
+    "tag": "Tech",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "name": "Diddy",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Sean_Combs_Cannes_2012_%283x4_cropped_2%29.jpg/330px-Sean_Combs_Cannes_2012_%283x4_cropped_2%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Sean_Combs_Cannes_2012_%283x4_cropped_2%29.jpg",
+    "author": "Nicolas Richoffer",
+    "license": "CC BY-SA 4.0",
+    "id": "diddy",
+    "tag": "Music",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "name": "JoJo Siwa",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/JoJo_Siwa_2026_%28cropped%29.jpg/330px-JoJo_Siwa_2026_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:JoJo_Siwa_2026_%28cropped%29.jpg",
+    "author": "KLHam01",
+    "license": "CC BY-SA 4.0",
+    "id": "jojo-siwa",
+    "tag": "Music & TV",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "name": "Mark Zuckerberg",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/P20260929DT-1655_%2855561811540%29_%28cropped_2%29.jpg/330px-P20260929DT-1655_%2855561811540%29_%28cropped_2%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:P20260929DT-1655_%2855561811540%29_%28cropped_2%29.jpg",
+    "author": "The White House",
+    "license": "Public domain",
+    "id": "mark-zuckerberg",
+    "tag": "Tech",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  {
+    "name": "Kanye West",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Kanye_West_at_the_2009_Tribeca_Film_Festival_%28crop_2%29.jpg/330px-Kanye_West_at_the_2009_Tribeca_Film_Festival_%28crop_2%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Kanye_West_at_the_2009_Tribeca_Film_Festival_%28crop_2%29.jpg",
+    "author": "David Shankbone (1974–)",
+    "license": "Public domain",
+    "id": "kanye-west",
+    "tag": "Music",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  {
+    "name": "Kim Kardashian",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Kim_Kardashian_West_2014.jpg/330px-Kim_Kardashian_West_2014.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Kim_Kardashian_West_2014.jpg",
+    "author": "Eva Rinaldi (1971–)",
+    "license": "CC BY-SA 2.0",
+    "id": "kim-kardashian",
+    "tag": "TV",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+  },
+  {
+    "name": "Taylor Swift",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Taylor_Swift_at_the_2023_MTV_Video_Music_Awards_%283%29.png/330px-Taylor_Swift_at_the_2023_MTV_Video_Music_Awards_%283%29.png",
+    "source": "https://commons.wikimedia.org/wiki/File:Taylor_Swift_at_the_2023_MTV_Video_Music_Awards_%283%29.png",
+    "author": "iHeartRadioCA",
+    "license": "CC BY 3.0",
+    "id": "taylor-swift",
+    "tag": "Music",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  {
+    "name": "Andrew Tate",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Andrew_Tate_-_James_Tamim_Upload_%28Cropped_Wide_Portrait%29.png/330px-Andrew_Tate_-_James_Tamim_Upload_%28Cropped_Wide_Portrait%29.png",
+    "source": "https://commons.wikimedia.org/wiki/File:Andrew_Tate_-_James_Tamim_Upload_%28Cropped_Wide_Portrait%29.png",
+    "author": "James English",
+    "license": "CC BY 3.0",
+    "id": "andrew-tate",
+    "tag": "Internet",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  {
+    "name": "Boris Johnson",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Boris_Johnson_official_portrait_%28cropped%29.jpg/330px-Boris_Johnson_official_portrait_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Boris_Johnson_official_portrait_%28cropped%29.jpg",
+    "author": "Ben Shread / Cabinet Office",
+    "license": "Open Government Licence 3.0",
+    "id": "boris-johnson",
+    "tag": "Politics",
+    "licenseUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+  },
+  {
+    "name": "Joe Biden",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Joe_Biden_presidential_portrait.jpg/330px-Joe_Biden_presidential_portrait.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Joe_Biden_presidential_portrait.jpg",
+    "author": "Adam Schultz (fl. 2007–)",
+    "license": "Public domain",
+    "id": "joe-biden",
+    "tag": "Politics",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  {
+    "name": "Barack Obama",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/330px-President_Barack_Obama.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:President_Barack_Obama.jpg",
+    "author": "Official White House Photo by Pete Souza",
+    "license": "Public domain",
+    "id": "barack-obama",
+    "tag": "Politics",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  {
+    "name": "Vladimir Putin",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Vladimir_Putin_%282026_02_23%29_%28cropped%29.jpg/330px-Vladimir_Putin_%282026_02_23%29_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Vladimir_Putin_%282026_02_23%29_%28cropped%29.jpg",
+    "author": "Kremlin.ru",
+    "license": "CC BY 4.0",
+    "id": "vladimir-putin",
+    "tag": "Politics",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "name": "Kim Jong Un",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Kim_Jong-un_and_Vladimir_Putin_%282023-09-13%29_12_%28cropped_2%29.jpg/330px-Kim_Jong-un_and_Vladimir_Putin_%282023-09-13%29_12_%28cropped_2%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Kim_Jong-un_and_Vladimir_Putin_%282023-09-13%29_12_%28cropped_2%29.jpg",
+    "author": "Владимир Смирнов / ТАСС",
+    "license": "CC BY 4.0",
+    "id": "kim-jong-un",
+    "tag": "Politics",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "name": "Gordon Ramsay",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Gordon_Ramsay_%28cropped%29.jpg/330px-Gordon_Ramsay_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Gordon_Ramsay_%28cropped%29.jpg",
+    "author": "Dave Pullig",
+    "license": "CC BY-SA 3.0",
+    "id": "gordon-ramsay",
+    "tag": "Food & TV",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  {
+    "name": "Simon Cowell",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Simon_Cowell_at_Greater_Together_LA_2026_%28cropped%29_2.jpg/330px-Simon_Cowell_at_Greater_Together_LA_2026_%28cropped%29_2.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Simon_Cowell_at_Greater_Together_LA_2026_%28cropped%29_2.jpg",
+    "author": "UKinUSA",
+    "license": "CC BY-SA 4.0",
+    "id": "simon-cowell",
+    "tag": "TV",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "name": "MrBeast",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/MrBeast_in_2026_%28cropped_4%29.png/330px-MrBeast_in_2026_%28cropped_4%29.png",
+    "source": "https://commons.wikimedia.org/wiki/File:MrBeast_in_2026_%28cropped_4%29.png",
+    "author": "Tyren Redd",
+    "license": "CC BY 4.0",
+    "id": "mrbeast",
+    "tag": "Internet",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "name": "Logan Paul",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Logan_Paul_RR25_%28cropped%29.jpg/330px-Logan_Paul_RR25_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Logan_Paul_RR25_%28cropped%29.jpg",
+    "author": "Diego Serrano",
+    "license": "CC BY 2.0",
+    "id": "logan-paul",
+    "tag": "Internet",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+  },
+  {
+    "name": "Snoop Dogg",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Snoop_Dogg%2C_WrestleMania_XL_%28cropped%29_%28cropped%29.jpg/330px-Snoop_Dogg%2C_WrestleMania_XL_%28cropped%29_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Snoop_Dogg%2C_WrestleMania_XL_%28cropped%29_%28cropped%29.jpg",
+    "author": "Diego Serrano",
+    "license": "CC BY 2.0",
+    "id": "snoop-dogg",
+    "tag": "Music",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+  },
+  {
+    "name": "Nicolas Cage",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Nicolas_Cage_at_Los_Angeles_Comic_Con_2026-2.jpg/330px-Nicolas_Cage_at_Los_Angeles_Comic_Con_2026-2.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Nicolas_Cage_at_Los_Angeles_Comic_Con_2026-2.jpg",
+    "author": "Kevin Paul",
+    "license": "CC BY 4.0",
+    "id": "nicolas-cage",
+    "tag": "Film",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "name": "Paris Hilton",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Paris_Hilton_at_WWD_Style_Awards_2026_%28cropped%29.jpg/330px-Paris_Hilton_at_WWD_Style_Awards_2026_%28cropped%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Paris_Hilton_at_WWD_Style_Awards_2026_%28cropped%29.jpg",
+    "author": "Kevin Paul",
+    "license": "CC BY 4.0",
+    "id": "paris-hilton",
+    "tag": "TV & music",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "name": "Greta Thunberg",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Greta_Thunberg_in_May_2026_%28cropped_3x4%29.jpg/330px-Greta_Thunberg_in_May_2026_%28cropped_3x4%29.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Greta_Thunberg_in_May_2026_%28cropped_3x4%29.jpg",
+    "author": "Kushal Das",
+    "license": "CC BY-SA 4.0",
+    "id": "greta-thunberg",
+    "tag": "Activism",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  }
+];
 export const characterById = id => CHARACTERS.find(character => character.id === id);
-export const characterTraits = character => [
-  character.hair === 'bald' ? 'Bald' : `${character.longHair ? 'Long' : 'Short'} ${character.hair} hair`,
-  character.glasses && 'glasses', character.hat && 'hat', character.beard && 'beard', character.earrings && 'earrings',
-].filter(Boolean).join(' · ');
-
-// Small geometric portraits: the drawn accessories match the roster exactly.
+export const characterTraits = character => character.tag;
+const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 export function portrait(character) {
-  const hair = {black:'#302c30',brown:'#70452e',blond:'#dfb85f',red:'#b85a3c',gray:'#a2a7ae',bald:'transparent'}[character.hair];
-  return `<svg viewBox="0 0 120 128" fill="none" aria-hidden="true" focusable="false">
-    <rect width="120" height="128" rx="12" fill="#ece6da"/>
-    ${character.longHair ? `<rect x="25" y="23" width="70" height="85" rx="30" fill="${hair}"/>` : ''}
-    <path d="M15 128v-6c0-20 20-31 45-31s45 11 45 31v6" fill="${character.shirt}"/>
-    <rect x="49" y="80" width="22" height="22" rx="8" fill="${character.skin}"/>
-    <circle cx="28" cy="61" r="7" fill="${character.skin}"/><circle cx="92" cy="61" r="7" fill="${character.skin}"/>
-    <rect x="30" y="23" width="60" height="70" rx="28" fill="${character.skin}"/>
-    ${character.hair !== 'bald' ? `<path d="M29 52V42c0-19 11-28 31-28s31 9 31 28v10c-9-4-16-11-20-19-10 12-24 17-42 19Z" fill="${hair}"/>` : ''}
-    <circle cx="47" cy="59" r="3" fill="#332d2b"/><circle cx="73" cy="59" r="3" fill="#332d2b"/>
-    <path d="m60 63-3 9h6" stroke="#78513f" stroke-width="2" stroke-linecap="round"/>
-    ${character.beard ? `<path d="M33 72c3 17 13 24 27 24s24-7 27-24c-7 3-11 4-15 4-8-5-16-5-24 0-4 0-8-1-15-4Z" fill="${character.hair === 'bald' ? '#70452e' : hair}"/>` : ''}
-    <path d="M51 79q9 7 18 0" stroke="${character.beard ? '#f3c5a3' : '#78513f'}" stroke-width="2.5" stroke-linecap="round"/>
-    ${character.glasses ? `<g stroke="#343b45" stroke-width="3"><rect x="33" y="50" width="23" height="19" rx="7"/><rect x="64" y="50" width="23" height="19" rx="7"/><path d="M56 57h8m-37-1h6m54 0h6"/></g>` : ''}
-    ${character.earrings ? `<g stroke="#f4cf65" stroke-width="3"><circle cx="29" cy="74" r="5"/><circle cx="91" cy="74" r="5"/></g>` : ''}
-    ${character.hat ? `<path d="M32 29v-9c0-9 8-14 28-14s28 5 28 14v9" fill="#396b73"/><rect x="23" y="26" width="74" height="9" rx="4" fill="#254d54"/>` : ''}
-  </svg>`;
+  return `<img class="who-photo" src="${escapeHTML(character.photo)}" alt="${escapeHTML(character.name)}" width="120" height="128" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
 }
